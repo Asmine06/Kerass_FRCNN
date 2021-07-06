@@ -10,6 +10,11 @@ import numpy as np
 import random
 
 def get_noise_data (input_path , name_data, per_noise_label,per_noise_bboxes,w,h, per_wout , per_add):
+	# name_data= train or val
+	#per_noise_label= percentage of noise labels  we want get
+	#per_noise_bboxes= percentage of noise bboxes  we want get ,w= noise rate for width , h= noise rate for height
+	#per_wout= percentage of missing rectangle we want to get
+	#per_add= percentage of rectangle to add
         all_imgs = []
 
         classes_count = {}
@@ -99,10 +104,10 @@ def get_noise_data (input_path , name_data, per_noise_label,per_noise_bboxes,w,h
                                 class_mapping[class_name] = len(class_mapping)
 
 
-                            rNoise_bbox = random()
-                            rNoise_label = random()
-                            rNoise_wout = random()
-                            rNoise_add = random()
+                            rNoise_bbox = random() 	### random percentage of noise bbox
+                            rNoise_label = random()	### random percentage of noise labels
+                            rNoise_wout = random()	### random percentage of missing rectangle 
+                            rNoise_add = random()	### random percentage of missing rectangle 
 				
 			
 				
@@ -113,16 +118,18 @@ def get_noise_data (input_path , name_data, per_noise_label,per_noise_bboxes,w,h
 			#################################################
 			# bruit wout: on passe des annotations 
 			 
+			    # On passe les anootations pour un pourcentage de per_wout, pour le bruit de type 3
                             if rNoise_wout <= per_wout:
 				continue
                             else:
+				### Bruit Type 1
                             	if rNoise_bbox <= per_noise_bboxes:
                                 	# On ajoute du bruit
                                 	# Bruit de bounding boxes
                                 	# On perturbe les coordonnées en largeur ou langueur
-					Nh=random.uniform(0,h)
-                                    	Nw=random.uniform(0,w)
-                                	rand_choice_bbox = random.choice(choice_bbox)
+					Nh=random.uniform(0,h)	# get noise rate for height
+                                    	Nw=random.uniform(0,w)	# noise rate for width
+                                	rand_choice_bbox = random.choice(choice_bbox)	# DEFINIR aléatoiremment comment perturber les bboxes
                                 	if rand_choice_bbox == 0:
                                     		# on perturbe en longueur
                                     		x1 = int(round(float(obj_bbox.find('xmin').text))) -Nw
@@ -155,13 +162,14 @@ def get_noise_data (input_path , name_data, per_noise_label,per_noise_bboxes,w,h
 					
 				difficulty = int(element_obj.find('difficult').text) == 1
 
-
+				# On perturbe les labels 
                             	if rNoise_label <= per_noise_label:
-                                	rN_class_name = random.choice(Nclass_mapping)
+                                	rN_class_name = random.choice(Nclass_mapping)	#affecter au hazard un nom à une classe
                                 	annotation_data['bboxes'].append({'class': rN_class_name, 'x1': x1, 'x2': x2, 'y1': y1, 'y2': y2,'difficult': difficulty})
                             	else:
                                 	annotation_data['bboxes'].append({'class':class_name, 'x1': x1, 'x2': x2, 'y1': y1, 'y2': y2,'difficult': difficulty})
 				
+				# rNoise_add= random percentage of rectangle
 				if rNoise_add <= per_add:
 					######### a completer pour les rectangles à generer aléatoirement
 					x1 = int(round(float(obj_bbox.find('xmin').text)))
