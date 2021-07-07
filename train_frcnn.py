@@ -94,7 +94,9 @@ inv_map = {v: k for k, v in class_mapping.items()}
 
 print('Training images per class:')
 pprint.pprint(classes_count)
-print(f'Num classes (including bg) = {len(classes_count)}')
+
+
+Num classes (including bg) = {len(classes_count)}')
 
 config_output_filename = options.config_filename
 
@@ -109,7 +111,7 @@ num_imgs = len(train_imgs)
 #train_imgs = [s for s in all_imgs if s['imageset'] == 'trainval']
 #val_imgs = [s for s in all_imgs if s['imageset'] == 'test']
 
-print(f'Num train samples {len(train_imgs}')
+print(f'Num train samples {len(train_imgs)}')
 print(f'Num val samples {len(val_imgs)}')
 
 
